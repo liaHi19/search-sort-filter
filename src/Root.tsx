@@ -1,42 +1,28 @@
-import { useMemo, useState } from 'react';
-import SearchBar from 'components/SearchBar';
-import RangeSlider from 'components/RangeSlider';
-import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon } from '@radix-ui/react-icons';
-import SelectMenu from 'components/SelectMenu';
-import { getUniqueItems } from 'core/utils';
-import CollapsibleList from 'components/CollapsibleList';
-import axios from 'axios';
-import { useEffect } from 'react';
-import { Item } from 'core/types';
+import { useMemo } from "react";
 
-function useItems(filters: URLSearchParams | null) {
-  const [loading, setLoading] = useState(true);
-  const [items, setData] = useState<Array<Item>>([]);
+import * as Checkbox from "@radix-ui/react-checkbox";
+import { CheckIcon } from "@radix-ui/react-icons";
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:3001/items' + (filters ? `?${filters}` : ''))
-      .then((res) => {
-        setLoading(false);
-        setData(res.data);
-      });
-  }, [filters]);
+import { getUniqueItems } from "core/utils";
+import { useItems } from "core/hooks/useItems";
 
-  return { loading, items };
-}
+import CollapsibleList from "components/CollapsibleList";
+import SelectMenu from "components/SelectMenu";
+import SearchBar from "components/SearchBar";
+import RangeSlider from "components/RangeSlider";
 
-export default function Root() {
-  const [query, setQuery] = useState<URLSearchParams | null>(null);
-  const { items } = useItems(query);
+const Root = () => {
+  const getItems = useItems();
+  const items = useMemo(() => getItems.data ?? [], [getItems.data]);
+
   const groupedItems = useMemo(
     () =>
-      getUniqueItems(items, 'color').map((item) => ({
+      getUniqueItems(items, "color").map((item) => ({
         label: item.color,
         name: item.color,
         value: item.color,
       })),
-    [items],
+    [items]
   );
   const itemCounts = useMemo(
     () =>
@@ -49,7 +35,7 @@ export default function Root() {
 
         return initial;
       }, {}),
-    [items],
+    [items]
   );
 
   return (
@@ -66,16 +52,16 @@ export default function Root() {
           name="sort"
           options={[
             {
-              label: 'Name',
-              value: 'name',
+              label: "Name",
+              value: "name",
             },
             {
-              label: 'Price High',
-              value: 'priceAsc',
+              label: "Price High",
+              value: "priceAsc",
             },
             {
-              label: 'Price Low',
-              value: 'priceDesc',
+              label: "Price Low",
+              value: "priceDesc",
             },
           ]}
         />
@@ -83,7 +69,7 @@ export default function Root() {
 
       <div className="flex">
         <div className="w-25 mr4">
-          <div style={{ position: 'sticky', top: '20px' }}>
+          <div style={{ position: "sticky", top: "20px" }}>
             <ul className="list pa0 ma0 pb3 bb b--black-10">
               <li className="f6 fw5 silver mb2">
                 <div className="flex justify-between">
@@ -94,19 +80,19 @@ export default function Root() {
               <li>
                 <button className="btn fw5 pa0 pv2 w-100 tl bg-transparent hover-light-purple flex justify-between">
                   Bags
-                  <span>{itemCounts['bags']}</span>
+                  <span>{itemCounts["bags"]}</span>
                 </button>
               </li>
               <li>
                 <button className="btn fw5 pa0 pv2 w-100 tl bg-transparent hover-light-purple flex justify-between">
                   Shoes
-                  <span>{itemCounts['shoes']}</span>
+                  <span>{itemCounts["shoes"]}</span>
                 </button>
               </li>
               <li>
                 <button className="btn fw5 pa0 pv2 w-100 tl bg-transparent hover-light-purple flex justify-between">
                   Jackets
-                  <span>{itemCounts['jackets']}</span>
+                  <span>{itemCounts["jackets"]}</span>
                 </button>
               </li>
             </ul>
@@ -136,7 +122,7 @@ export default function Root() {
                 <div className="mv2">
                   <RangeSlider
                     maxPrice={Math.max(
-                      ...items.map((item) => item.price / 100),
+                      ...items.map((item) => item.price / 100)
                     )}
                   />
                 </div>
@@ -153,7 +139,7 @@ export default function Root() {
                   <a className="link black hover-light-purple" href="/t">
                     <div className="flex flex-column h-100">
                       <img
-                        style={{ objectFit: 'cover', height: '420px' }}
+                        style={{ objectFit: "cover", height: "420px" }}
                         alt=""
                         loading="lazy"
                         className="img flex-auto bg-gray"
@@ -175,4 +161,6 @@ export default function Root() {
       </div>
     </div>
   );
-}
+};
+
+export default Root;
