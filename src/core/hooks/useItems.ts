@@ -5,7 +5,9 @@ import { useSearchParams } from "react-router-dom";
 import { Item } from "core/types";
 
 export const useItems = (): UseQueryResult<Item[]> => {
-  const [search] = useSearchParams();
+  const [search] = useSearchParams({
+    sort: "name",
+  });
 
   return useQuery(
     ["items", search.toString()],

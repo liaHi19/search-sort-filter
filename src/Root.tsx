@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { CheckIcon } from "@radix-ui/react-icons";
@@ -13,6 +14,7 @@ import RangeSlider from "components/RangeSlider";
 import ProductList from "components/ProductList";
 
 const Root = () => {
+  const [search, setSearch] = useSearchParams();
   const getItems = useItems();
   const items = useMemo(() => getItems.data ?? [], [getItems.data]);
 
@@ -49,6 +51,13 @@ const Root = () => {
         </div>
 
         <SelectMenu
+          onChange={(e) => {
+            const sortBy = e.target.value;
+            search.set("sort", sortBy);
+            setSearch(search, {
+              replace: true,
+            });
+          }}
           label="Sort by"
           name="sort"
           options={[

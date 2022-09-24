@@ -8,8 +8,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const applyFilters = (products, { query }) => {
+const applyFilters = (products, { query, sort }) => {
   const filteredProducts = [];
+  console.log(sort);
   for (let product of products) {
     if (query && !product.name.toLowerCase().includes(query.toLowerCase())) {
       continue;
@@ -17,7 +18,18 @@ const applyFilters = (products, { query }) => {
     filteredProducts.push(product);
   }
 
-  return filteredProducts;
+  return filteredProducts.sort((a, b) => {
+    const { name: nameA, price: priceA } = a;
+    const { name: nameB, price: priceB } = b;
+    switch (sort) {
+      case "priceAsc":
+        return priceB - priceA;
+      case "priceDesc":
+        return priceA - priceB;
+      default:
+        return nameA.localeCompare(nameB);
+    }
+  });
 };
 
 app.get("/items", (req, res) => {
