@@ -81,19 +81,19 @@ const Root = () => {
               <li>
                 <button className="btn fw5 pa0 pv2 w-100 tl bg-transparent hover-light-purple flex justify-between">
                   Bags
-                  <span>{itemCounts["bags"]}</span>
+                  <span>{itemCounts["bags"] ?? 0}</span>
                 </button>
               </li>
               <li>
                 <button className="btn fw5 pa0 pv2 w-100 tl bg-transparent hover-light-purple flex justify-between">
                   Shoes
-                  <span>{itemCounts["shoes"]}</span>
+                  <span>{itemCounts["shoes"] ?? 0}</span>
                 </button>
               </li>
               <li>
                 <button className="btn fw5 pa0 pv2 w-100 tl bg-transparent hover-light-purple flex justify-between">
                   Jackets
-                  <span>{itemCounts["jackets"]}</span>
+                  <span>{itemCounts["jackets"] ?? 0}</span>
                 </button>
               </li>
             </ul>

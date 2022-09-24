@@ -32,6 +32,7 @@ const SearchBar = () => {
         onFocus={() => setFocused((focus) => !focus)}
         id="search"
         name="search"
+        defaultValue={search.get("query") ?? ""}
         className="bn outline-0"
         type="search"
         placeholder="Find items..."
