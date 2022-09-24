@@ -1,10 +1,6 @@
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import * as Checkbox from "@radix-ui/react-checkbox";
-import { CheckIcon } from "@radix-ui/react-icons";
-
-import { getUniqueItems } from "core/utils";
 import { useItems } from "core/hooks/useItems";
 
 import CollapsibleList from "components/CollapsibleList";
@@ -12,21 +8,13 @@ import SelectMenu from "components/SelectMenu";
 import SearchBar from "components/SearchBar";
 import RangeSlider from "components/RangeSlider";
 import ProductList from "components/ProductList";
+import ColorFilters from "components/ColorFilters";
 
 const Root = () => {
   const [search, setSearch] = useSearchParams();
   const getItems = useItems();
   const items = useMemo(() => getItems.data ?? [], [getItems.data]);
 
-  const groupedItems = useMemo(
-    () =>
-      getUniqueItems(items, "color").map((item) => ({
-        label: item.color,
-        name: item.color,
-        value: item.color,
-      })),
-    [items]
-  );
   const itemCounts = useMemo(
     () =>
       items.reduce<Record<string, number>>((initial, item) => {
@@ -106,27 +94,7 @@ const Root = () => {
                 </button>
               </li>
             </ul>
-
-            <CollapsibleList title="Color">
-              {groupedItems.map((field, key) => (
-                <li key={key} className="pv2">
-                  <div className="flex items-center">
-                    <Checkbox.Root
-                      id={field.name}
-                      name={field.name}
-                      className="checkbox lh-solid flex items-center justify-center pa0 bg-white w125 h125 br2 bn"
-                    >
-                      <Checkbox.Indicator>
-                        <CheckIcon className="checkbox__icon w125 h125" />
-                      </Checkbox.Indicator>
-                    </Checkbox.Root>
-                    <label htmlFor={field.name} className="ml3 fw5 f5">
-                      {field.label}
-                    </label>
-                  </div>
-                </li>
-              ))}
-            </CollapsibleList>
+            <ColorFilters />
             <CollapsibleList title="Price">
               <li>
                 <div className="mv2">

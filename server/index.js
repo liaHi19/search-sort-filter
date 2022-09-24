@@ -8,13 +8,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const applyFilters = (products, { query, sort }) => {
+const applyFilters = (products, { query, sort, colors }) => {
   const filteredProducts = [];
-  console.log(sort);
+
   for (let product of products) {
     if (query && !product.name.toLowerCase().includes(query.toLowerCase())) {
       continue;
     }
+
+    if (colors && !colors.split(",").includes(product.color)) {
+      continue;
+    }
+
     filteredProducts.push(product);
   }
 
